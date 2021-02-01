@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.SpanInfoMapper">
+    <resultMap id="BaseResultMap" type="com.example.demo.entity.SpanInfo">
+        <result column="spanId" jdbcType="VARCHAR" property="spanId"/>
+        <result column="traceId" jdbcType="VARCHAR" property="traceId"/>
+        <result column="pathId" jdbcType="BIGINT" property="pathId"/>
+        <result column="operationName" jdbcType="VARCHAR" property="operationName"/>
+        <result column="serviceName" jdbcType="VARCHAR" property="serviceName"/>
+        <result column="podIp" jdbcType="VARCHAR" property="podIp"/>
+        <result column="requestName" jdbcType="VARCHAR" property="requestName"/>
+        <result column="spanLayer" jdbcType="VARCHAR" property="spanLayer"/>
+        <result column="startTime" jdbcType="BIGINT" property="startTime"/>
+        <result column="endTime" jdbcType="BIGINT" property="endTime"/>
+        <result column="tags" jdbcType="VARCHAR" property="tags"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        spanId, traceId, pathId, operationName, serviceName, podIp, requestName, spanLayer, startTime, endTime, tags
+    </sql>
+
+    <insert id="saveOne" parameterType="com.example.demo.entity.SpanInfo">
+        INSERT INTO spans
+        (spanId, traceId, pathId, operationName, serviceName, podIp, requestName, spanLayer, startTime, endTime, tags)
+        VALUES
+        (#{spanId}, #{traceId}, #{pathId}, #{operationName}, #{serviceName}, #{podIp},
+         #{requestName}, #{spanLayer}, #{startTime}, #{endTime}, #{tags})
+    </insert>
+
+    <insert id="saveMany" parameterType="java.util.List">
+        INSERT INTO spans
+        (spanId, traceId, pathId, operationName, serviceName, podIp, requestName, spanLayer, startTime, endTime, tags)
+        VALUES
+        <foreach collection ="list" item="item" separator =",">
+            (#{item.spanId}, #{item.traceId}, #{item.pathId}, #{item.operationName}, #{item.serviceName}, #{item.podIp},
+            #{item.requestName}, #{item.spanLayer}, #{item.startTime}, #{item.endTime}, #{item.tags})
+        </foreach >
+    </insert>
+
+    <select id="selectBySpanId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from spans
+        where spanId = #{spanId}
+    </select>
+
+    <select id="selectManyByTraceId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from spans
+        where traceId = #{traceId}
+    </select>
+
+    <select id="selectManyByPathId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from spans
+        where pathId = #{pathId}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from spans
+    </select>
+</mapper>
