@@ -1,4 +1,6 @@
 # clickhouse-spring-example
 
-SpringBoot
+Libraries:
+
+SpringBoot <br>
 Mybatis for insert and accessing data from clickhouse.
